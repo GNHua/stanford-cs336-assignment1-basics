@@ -1,8 +1,5 @@
-from collections import Counter, defaultdict
-from heapq import heappush
-from itertools import pairwise
 
-from .model import State, Token, TokenPair, Word
+from .model import State, TokenPair
 from .pre_tokenizer import PreTokenizer
 import time
 

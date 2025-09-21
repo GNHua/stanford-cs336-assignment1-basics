@@ -24,6 +24,9 @@ class Token(NamedTuple):
     def __lt__(self, other: Token) -> bool:
         return (self.value, len(self.value)) > (other.value, len(other.value))
 
+    def __str__(self):
+        return f"Token({self.id}, {self.value})"
+
 
 class TokenPair(NamedTuple):
     first: Token
@@ -32,15 +35,21 @@ class TokenPair(NamedTuple):
     def to_token(self, id: int) -> Token:
         return Token(id, self.first.value + self.second.value, self)
 
+    def to_bytes(self) -> bytes:
+        return self.first.value + self.second.value
+
+    def __str__(self):
+        return f"({self.first}, {self.second})"
+
 
 class Word(NamedTuple):
     tokens: tuple[Token, ...]
 
     @staticmethod
-    def from_bytes(byte_data: bytes) -> "Word":
+    def from_bytes(byte_data: bytes) -> Word:
         return Word(tuple([Token(b, bytes([b])) for b in byte_data]))
 
-    def merge_tokens(self, token: Token) -> "Word":
+    def merge_tokens(self, token: Token) -> Word:
         assert token.merge
 
         _tokens = []
@@ -66,6 +75,9 @@ class Word(NamedTuple):
 
     def __getitem__(self, index):
         return self.tokens[index]
+
+    def __str__(self):
+        return f"Word({','.join([str(t) for t in self.tokens])})"
 
 
 @dataclass
